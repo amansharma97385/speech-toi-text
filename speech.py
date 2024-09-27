@@ -1,33 +1,40 @@
-import pyttsx3
+from flask import Flask, render_template, request
 import speech_recognition as sr
-import pyfiglet
+import pyttsx3
+
+app = Flask(__name__)
 
 def sptext():
     rec = sr.Recognizer()
     with sr.Microphone() as source:
-        print("Haa bhai, sun raha hoon...")
-        
-        # Remove noise
+        print("Listening...")
+
+        # Adjust for ambient noise
         rec.adjust_for_ambient_noise(source)
-        
-        print("Sun le raha hoon kya bola tu...")
+
+        print("Recording...")
         audio = rec.listen(source)
-        
+
         try:
             # Recognize speech using Google's speech recognition
             data = rec.recognize_google(audio)
-            print("Sun liya: " + data)
-            show_large_text(data)
+            print("Recognized: " + data)
+            return data
         except sr.UnknownValueError:
-            print("Kuch samajh nahi aaya")
-            show_large_text("Error: Kuch samajh nahi aaya")
+            print("Could not understand the audio.")
+            return "Could not understand the audio"
         except sr.RequestError as e:
             print(f"Error: {e}")
-            show_large_text(f"Error: {e}")
+            return f"Error: {e}"
 
-def show_large_text(text):
-    # Create large ASCII art text
-    large_text = pyfiglet.figlet_format(text)
-    print(large_text)
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-sptext()
+@app.route('/recognize', methods=['POST'])
+def recognize_speech():
+    text = sptext()  # Call the speech recognition function
+    return render_template('index.html', recognized_text=text)
+
+if __name__ == '__main__':
+    app.run(debug=True)
