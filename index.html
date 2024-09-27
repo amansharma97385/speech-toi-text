@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Recognition</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #333;
+        }
+        #output {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: blue;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Speech Recognition Interface</h1>
+    
+    <form action="/recognize" method="POST">
+        <button type="submit" class="button">Start Speech Recognition</button>
+    </form>
+
+    <div id="output">
+        <p>Recognized Text: {{ recognized_text }}</p>
+    </div>
+</body>
+</html>
+
